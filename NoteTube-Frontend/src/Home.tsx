@@ -1,4 +1,6 @@
 import { useRef, useState } from 'react';
+import axios from 'axios';
+import utils from './utils/consts';
 import './App.css';
 import MarkDownViewer from './MarkDownViewer';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -6,6 +8,10 @@ import { useReactToPrint } from 'react-to-print';
 export default function Home() {
   const outputDivRef = useRef<HTMLDivElement>(null);
   const iFrameRef = useRef<HTMLIFrameElement>(null);
+  const [link, setLink] = useState('');
+  const [description, setDescription] = useState('');
+  const [notes, setNotes] = useState('');
+  const [loading, setLoading] = useState(false);
   const componentRef = useRef(null);
 
   const handlePrint = useReactToPrint({
@@ -22,57 +28,16 @@ export default function Home() {
     }
   `,
   });
-  const osNotes =
-    '# 🖥️ Introduction to Operating Systems (OS)\n\n' +
-    'An **Operating System (OS)** is system software that manages **hardware resources** and provides **services** for computer programs. It acts as an **interface between users and hardware**.\n\n' +
-    '---\n\n' +
-    '## 🎯 Main Objectives of an Operating System\n\n' +
-    '- **Convenience**: Makes the computer easier to use.\n' +
-    '- **Efficiency**: Manages resources to maximize performance.\n' +
-    '- **Resource Management**: Allocates CPU, memory, I/O devices.\n' +
-    '- **Security & Protection**: Controls access to data and hardware.\n' +
-    '- **User Interface**: CLI (Command Line) or GUI (Graphical UI).\n\n' +
-    '---\n\n' +
-    '## ⚙️ Types of Operating Systems\n\n' +
-    '| Type                    | Description                                           |\n' +
-    '|-------------------------|-------------------------------------------------------|\n' +
-    '| **Batch OS**            | Executes batches of jobs without user interaction.   |\n' +
-    '| **Time-Sharing OS**     | Multiple users share system time simultaneously.     |\n' +
-    '| **Distributed OS**      | Manages multiple computers as one system.            |\n' +
-    '| **Real-Time OS (RTOS)** | Responds instantly to input (used in embedded systems). |\n' +
-    '| **Multiprogramming OS** | Runs multiple programs at once for better CPU usage. |\n\n' +
-    '---\n\n' +
-    '## 🧠 Key Components\n\n' +
-    '- **Kernel**: Core part that manages tasks like memory, processes, and devices.\n' +
-    '- **Shell**: Interface between user and kernel (CLI or GUI).\n' +
-    '- **File System**: Manages data storage and access.\n' +
-    '- **Device Drivers**: Allow OS to communicate with hardware.\n\n' +
-    '---\n\n' +
-    '## 🔄 Important OS Functions\n\n' +
-    '- **Process Management**\n' +
-    '- **Memory Management**\n' +
-    '- **File Management**\n' +
-    '- **I/O System Management**\n' +
-    '- **Security & Protection**\n' +
-    '- **Networking**\n\n' +
-    '---\n\n' +
-    '## 🧵 Examples of Operating Systems\n\n' +
-    '- **Windows**\n' +
-    '- **Linux**\n' +
-    '- **macOS**\n' +
-    '- **Unix**\n' +
-    '- **Android**\n' +
-    '- **iOS**\n\n' +
-    '---\n\n' +
-    '> 📌 An OS is essential for making a computer useful — without it, no software can run!\n';
 
-  const [link, setLink] = useState('');
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const videoId = extractYouTubeVideoId(link);
-
+    const data = {
+      youtubeURL: link,
+      message: description,
+    };
+    setLoading(true);
     if (iFrameRef.current && videoId) {
       iFrameRef.current.src = `https://www.youtube.com/embed/${videoId}`;
 
@@ -85,6 +50,16 @@ export default function Home() {
     } else {
       alert('Invalid YouTube link');
     }
+    await axios
+      .post(`${utils.BASE_URL}${utils.getResponse}`, data)
+      .then((res) => {
+        if (res.data && res.data.response) {
+          setLoading(false);
+          setNotes(res.data.response);
+        } else {
+          alert('No response received from the server');
+        }
+      });
   };
 
   const handleClose = () => {
@@ -123,7 +98,13 @@ export default function Home() {
           </div>
           <div className='inputElement'>
             <label>Description for Notes</label>
-            <textarea placeholder='Enter Description' className='descInput' />
+            <textarea
+              placeholder='Enter Description'
+              className='descInput'
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+            />
           </div>
           <div className='inputElement'>
             <button className='submitBtn' type='submit'>
@@ -156,7 +137,11 @@ export default function Home() {
           </div>
         </div>
         <div className='markdownContainer' ref={componentRef}>
-          <MarkDownViewer content={osNotes} />
+          {loading ? (
+            <div className='spinner'></div>
+          ) : (
+            <MarkDownViewer content={notes} />
+          )}
         </div>
       </div>
     </div>

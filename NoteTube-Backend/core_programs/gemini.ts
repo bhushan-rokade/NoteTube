@@ -25,7 +25,6 @@ const getGeminiRes = async (videoId: string, mesg: string) => {
 
   const result = await model.generateContent(prompt);
   const output = await result.response.text();
-  console.log(output);
   return output;
 };
 

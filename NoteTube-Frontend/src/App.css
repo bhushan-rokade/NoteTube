@@ -46,7 +46,7 @@ body {
   display: none;
   flex-direction: column;
   align-items: center;
-  background-color: #333333;
+  background-color: #0d1117;
   flex: 1;
   height: 100%;
   border-top-left-radius: 20px;
@@ -56,7 +56,7 @@ body {
 .headerDiv {
   display: flex;
   width: 94%;
-  height: 15%;
+  min-height: 8vh;
   border-bottom: 1px solid black;
   border-top-left-radius: 20px;
   background-color: white;
@@ -253,5 +253,20 @@ body {
     overflow-y: scroll;
     font-family: 'Roboto', sans-serif;
     padding-bottom: 5px;
+  }
+}
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 6px solid rgba(0, 0, 0, 0.2);
+  border-top-color: #4f46e5; /* Indigo */
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 2rem auto;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
