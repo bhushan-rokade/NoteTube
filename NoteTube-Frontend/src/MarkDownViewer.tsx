@@ -3,9 +3,13 @@ import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import 'github-markdown-css/github-markdown.css';
 import 'highlight.js/styles/github.css';
-import './App.css'; // Ensure you have the correct path to your CSS file
+import './App.css';
 
-const MarkdownViewer = ({ content }) => {
+interface MarkdownViewerProps {
+  content: string;
+}
+
+const MarkdownViewer = ({ content }: MarkdownViewerProps) => {
   return (
     <div
       className='markdown-body'

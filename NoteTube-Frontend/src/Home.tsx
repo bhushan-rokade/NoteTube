@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import axios from 'axios';
-import utils from './utils/consts';
+import utils from './utils/consts.ts';
 import './App.css';
 import MarkDownViewer from './MarkDownViewer';
 import 'bootstrap-icons/font/bootstrap-icons.css';
