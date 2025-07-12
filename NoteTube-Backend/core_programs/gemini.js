@@ -52,7 +52,6 @@ var getGeminiRes = function (videoId, mesg) { return __awaiter(void 0, void 0, v
                 trans.forEach(function (element) {
                     subprompt += element.text + ' ';
                 });
-                console.log('subprompt:', subprompt);
                 prompt = subprompt + "\n".concat(mesg);
                 return [4 /*yield*/, model.generateContent(prompt)];
             case 2:

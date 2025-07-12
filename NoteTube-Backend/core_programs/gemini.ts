@@ -21,7 +21,6 @@ const getGeminiRes = async (videoId: string, mesg: string) => {
   trans.forEach((element) => {
     subprompt += element.text + ' ';
   });
-  console.log('subprompt:', subprompt);
   const prompt = subprompt + `\n${mesg}`;
 
   const result = await model.generateContent(prompt);
