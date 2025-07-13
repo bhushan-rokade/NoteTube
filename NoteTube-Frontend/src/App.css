@@ -8,11 +8,63 @@ html,
 body {
   height: auto;
   min-height: 100vh;
+  scroll-behavior: smooth;
 }
 *::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
-
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+  z-index: 9999; /* Ensure it covers everything */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: overlayAnimation 2s;
+  visibility: hidden;
+  animation-timing-function: ease-in-out;
+}
+@keyframes overlayAnimation {
+  0% {
+    opacity: 1;
+    visibility: visible;
+  }
+  50% {
+    opacity: 1;
+    height: 100%;
+  }
+  100% {
+    opacity: 0;
+    height: 0;
+    visibility: hidden;
+  }
+}
+.headerOverlay {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 50%;
+}
+.logoOverlay {
+  width: 10rem;
+  height: 10rem;
+}
+.logoTextOverlay {
+  font-size: clamp(10rem, 5vw, 10rem);
+  font-weight: 600;
+  color: white;
+  overflow: hidden;
+  animation: textExpand 2s;
+  animation-timing-function: ease-in-out;
+  font-family: 'Roboto', sans-serif;
+  margin-block: 0.5rem;
+}
 #root {
   height: 100%;
   width: 100%;
@@ -88,7 +140,7 @@ body {
   padding-block: 1rem;
 }
 .inputForm {
-  width: 50%;
+  width: 30%;
   display: flex;
   flex-direction: column;
   padding-block: 4rem;
@@ -161,26 +213,55 @@ body {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 100%;
   height: 10%;
-  background-color: #333333;
+  background-color: #333;
 }
 .logo {
   width: 4rem;
   height: 4rem;
 }
 .logoText {
-  font-size: clamp(3.5rem);
+  font-size: clamp(4rem);
   font-weight: 600;
   color: white;
+  overflow: hidden;
+  animation: textExpand 3s;
+  animation-timing-function: ease-in-out;
   font-family: 'Roboto', sans-serif;
   margin-block: 0.5rem;
 }
 .markdownContainer {
   width: 100%;
   overflow-y: scroll;
+  display: flex;
+  flex: 1;
+  background-color: #0d1117;
   font-family: 'Roboto', sans-serif;
-  padding-bottom: 5px;
+  padding-bottom: 3rem;
+}
+@keyframes textExpand {
+  0% {
+    width: 0;
+  }
+  50% {
+    width: 100%;
+  }
+}
+@keyframes formExpandBig {
+  0% {
+    width: 0;
+  }
+  50% {
+    width: 70%;
+  }
+}
+@keyframes formExpandSmall {
+  0% {
+    width: 0;
+  }
+  50% {
+    width: 30%;
+  }
 }
 @media screen and (max-width: 768px) {
   html,
@@ -191,7 +272,20 @@ body {
     padding: 0;
     overflow: hidden; /* prevents page scroll */
   }
-
+  .logoOverlay {
+    width: 3rem;
+    height: 3rem;
+  }
+  .logoTextOverlay {
+    font-size: 2rem;
+    font-weight: 600;
+    color: white;
+    overflow: hidden;
+    animation: textExpand 2s;
+    animation-timing-function: ease-in-out;
+    font-family: 'Roboto', sans-serif;
+    margin-block: 0.5rem;
+  }
   .Container {
     height: 100vh;
     width: 100%;
@@ -215,6 +309,7 @@ body {
     display: none; /* Or block */
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     width: 100%;
     background-color: #333;
     border-radius: 0;
@@ -235,6 +330,8 @@ body {
     width: 70%;
     padding-block: 1rem;
     padding-inline: 0;
+    animation: formExpandBig 3s;
+    animation-timing-function: ease-in-out;
   }
   .inputElement {
     width: 100%;

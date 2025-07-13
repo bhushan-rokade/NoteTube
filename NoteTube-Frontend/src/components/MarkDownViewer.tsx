@@ -3,7 +3,7 @@ import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import 'github-markdown-css/github-markdown.css';
 import 'highlight.js/styles/github.css';
-import './App.css';
+import '../App.css';
 
 interface MarkdownViewerProps {
   content: string;

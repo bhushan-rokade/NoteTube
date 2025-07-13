@@ -1,10 +1,11 @@
 import { useRef, useState } from 'react';
 import axios from 'axios';
-import utils from './utils/consts.ts';
-import './App.css';
-import MarkDownViewer from './MarkDownViewer';
+import utils from '../utils/consts.ts';
+import '../App.css';
+import MarkDownViewer from '../components/MarkDownViewer.tsx';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useReactToPrint } from 'react-to-print';
+import FormView from '../components/FormView.tsx';
 export default function Home() {
   const outputDivRef = useRef<HTMLDivElement>(null);
   const iFrameRef = useRef<HTMLIFrameElement>(null);
@@ -37,6 +38,9 @@ export default function Home() {
       youtubeURL: link,
       message: description,
     };
+    if (description.trim() === '') {
+      alert('Please enter a description for the notes.');
+    }
     setLoading(true);
     if (iFrameRef.current && videoId) {
       iFrameRef.current.src = `https://www.youtube.com/embed/${videoId}`;
@@ -80,38 +84,23 @@ export default function Home() {
 
   return (
     <div className='Container'>
+      <div className='overlay'>
+        <div className='headerOverlay'>
+          <img src='/notetube-icon.png' className='logoOverlay' alt='logo' />
+          <h1 className='logoTextOverlay'>NoteTube</h1>
+        </div>
+      </div>
       <div className='inputDiv'>
         <div className='header'>
           <img src='/notetube-icon.png' className='logo' alt='logo' />
           <h1 className='logoText'>NoteTube</h1>
         </div>
-        <form className='inputForm' onSubmit={handleSubmit}>
-          <div className='inputElement'>
-            <label>Enter Youtube Link</label>
-            <input
-              placeholder='Enter Youtube Video Link'
-              className='input'
-              type='text'
-              value={link}
-              onChange={(e) => setLink(e.target.value)}
-            />
-          </div>
-          <div className='inputElement'>
-            <label>Description for Notes</label>
-            <textarea
-              placeholder='Enter Description'
-              className='descInput'
-              onChange={(e) => {
-                setDescription(e.target.value);
-              }}
-            />
-          </div>
-          <div className='inputElement'>
-            <button className='submitBtn' type='submit'>
-              Submit
-            </button>
-          </div>
-        </form>
+        <FormView
+          link={link}
+          setLink={setLink}
+          setDescription={setDescription}
+          handleSubmit={handleSubmit}
+        />
 
         <iframe
           className='iFrame'
