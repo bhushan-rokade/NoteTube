@@ -127,7 +127,11 @@ export default function Home() {
         </div>
         <div className='markdownContainer' ref={componentRef}>
           {loading ? (
-            <div className='spinner'></div>
+            <div className='spinnerDiv'>
+              <div className='spinner'></div>
+              <h1>Hold On tight</h1>
+              <h3>It may take a few seconds</h3>
+            </div>
           ) : (
             <MarkDownViewer content={notes} />
           )}
