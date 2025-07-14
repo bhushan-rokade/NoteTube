@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import MarkDownViewer from './MarkDownViewer';
+import { useRef } from 'react';
 
 interface TypewriterProps {
   text: string;
@@ -13,6 +14,7 @@ const TypewriterText: React.FC<TypewriterProps> = ({
   onDone,
 }) => {
   const [displayedText, setDisplayedText] = useState('');
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let i = 0;
@@ -29,7 +31,24 @@ const TypewriterText: React.FC<TypewriterProps> = ({
     return () => clearInterval(interval);
   }, []);
 
-  return <MarkDownViewer content={displayedText} />;
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+  }, [displayedText]);
+
+  return (
+    <div
+      ref={containerRef}
+      style={{
+        width: '100%',
+        height: '100%',
+        overflowY: 'auto',
+        paddingRight: '1rem',
+      }}>
+      <MarkDownViewer content={displayedText} />
+    </div>
+  );
 };
 
 export default TypewriterText;
