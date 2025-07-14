@@ -1,10 +1,14 @@
 import axios from 'axios';
 
 type TransObj = {
+  index: number;
+  start: number;
+  dur: number;
+  end: number;
   text: string;
 };
 
-// ✅ Extracts YouTube video ID from a full URL or accepts a direct ID
+// Helper function to extract video ID from URL or accept ID directly
 function extractVideoId(input: string): string | null {
   const regex =
     /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
@@ -12,29 +16,28 @@ function extractVideoId(input: string): string | null {
   return match ? match[1] : input.length === 11 ? input : null;
 }
 
-// ✅ Main function to fetch transcript from RapidAPI
-export default async function getTranscript(
+async function getTranscript(
   input: string,
   lang: string = 'en'
-): Promise<TransObj> {
+): Promise<Array<TransObj>> {
   const videoId = extractVideoId(input);
   if (!videoId) {
-    console.error('❌ Invalid YouTube URL or video ID:', input);
-    return { text: '' };
+    console.error('Invalid YouTube URL or video ID:', input);
+    return [];
   }
+
+  console.log('Fetching transcript for videoId:', videoId);
 
   const options = {
     method: 'GET',
-    url: 'https://high-availability-youtube-transcript-api.p.rapidapi.com/yt_transcript',
+    url: `https://subtitles-for-youtube2.p.rapidapi.com/subtitles/${videoId}`,
     params: {
-      video_id: videoId,
-      lang: lang,
-      format: 'json',
+      type: 'None',
+      translated: 'None',
     },
     headers: {
       'x-rapidapi-key': '99919ff464msh99b9a47695de3cap1af760jsn282fcfd2e0f1',
-      'x-rapidapi-host':
-        'high-availability-youtube-transcript-api.p.rapidapi.com',
+      'x-rapidapi-host': 'subtitles-for-youtube2.p.rapidapi.com',
     },
   };
 
@@ -42,23 +45,22 @@ export default async function getTranscript(
     const response = await axios.request(options);
     const data = response.data;
 
-    // Assuming the API response includes `text` or an array you want to join
-    if (Array.isArray(data)) {
-      const fullText = data
-        .map((item: { text: string }) => item.text)
-        .join(' ');
-      return { text: fullText };
-    } else if (typeof data === 'object' && 'text' in data) {
-      return data as TransObj;
+    if (!Array.isArray(data)) {
+      console.error('Unexpected response format:', data);
+      return [];
     }
 
-    console.warn('⚠️ Unexpected API response format');
-    return { text: '' };
-  } catch (error: any) {
-    console.error(
-      '❌ Error fetching transcript:',
-      error?.response?.data || error.message
-    );
-    return { text: '' };
+    return data.map((item) => ({
+      index: item.index,
+      start: item.start,
+      dur: item.dur,
+      end: item.end,
+      text: item.text,
+    }));
+  } catch (error) {
+    console.error('Error fetching transcript:', error);
+    return [];
   }
 }
+
+export default getTranscript;

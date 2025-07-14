@@ -43,12 +43,20 @@ var getGeminiRes = function (videoId, mesg) { return __awaiter(void 0, void 0, v
     var trans, genAI, model, subprompt, prompt, result, output;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, (0, youtube_transcript_1.default)(videoId)];
+            case 0:
+                // Fetch transcript using your updated RapidAPI-based function
+                console.log('Fetching transcript for videoId:', videoId);
+                return [4 /*yield*/, (0, youtube_transcript_1.default)(videoId)];
             case 1:
                 trans = _a.sent();
-                genAI = new GoogleGenerativeAI(process.env.API_KEY || '');
+                console.log('Transcript generated');
+                genAI = new GoogleGenerativeAI(process.env.API_KEY || '' // Ensure API_KEY is set in .env file
+                );
                 model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-                subprompt = trans.text;
+                subprompt = '';
+                trans.forEach(function (element) {
+                    subprompt += element.text + ' ';
+                });
                 prompt = subprompt + "\n".concat(mesg);
                 return [4 /*yield*/, model.generateContent(prompt)];
             case 2:

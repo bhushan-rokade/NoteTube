@@ -1,6 +1,5 @@
 import { useRef, useState } from 'react';
 import axios from 'axios';
-import utils from '../utils/consts.ts';
 import '../App.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useReactToPrint } from 'react-to-print';
@@ -66,7 +65,7 @@ export default function Home() {
       alert('Invalid YouTube link');
     }
     await axios
-      .post(`${utils.BASE_URL}${utils.getResponse}`, data)
+      .post(`http://localhost:3001/getGeminiResponse`, data)
       .then((res) => {
         if (res.data && res.data.response) {
           setLoading(false);
