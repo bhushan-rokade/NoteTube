@@ -36,63 +36,66 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = getTranscript;
 var axios_1 = require("axios");
-// Helper function to extract video ID from URL or accept ID directly
+// ✅ Extracts YouTube video ID from a full URL or accepts a direct ID
 function extractVideoId(input) {
     var regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     var match = input.match(regex);
     return match ? match[1] : input.length === 11 ? input : null;
 }
+// ✅ Main function to fetch transcript from RapidAPI
 function getTranscript(input_1) {
     return __awaiter(this, arguments, void 0, function (input, lang) {
-        var videoId, options, response, data, error_1;
+        var videoId, options, response, data, fullText, error_1;
+        var _a;
         if (lang === void 0) { lang = 'en'; }
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     videoId = extractVideoId(input);
                     if (!videoId) {
-                        console.error('Invalid YouTube URL or video ID:', input);
-                        return [2 /*return*/, []];
+                        console.error('❌ Invalid YouTube URL or video ID:', input);
+                        return [2 /*return*/, { text: '' }];
                     }
-                    console.log('Fetching transcript for videoId:', videoId);
                     options = {
                         method: 'GET',
-                        url: "https://subtitles-for-youtube2.p.rapidapi.com/subtitles/".concat(videoId),
+                        url: 'https://high-availability-youtube-transcript-api.p.rapidapi.com/yt_transcript',
                         params: {
-                            type: 'None',
-                            translated: 'None',
+                            video_id: videoId,
+                            lang: lang,
+                            format: 'json',
                         },
                         headers: {
                             'x-rapidapi-key': '99919ff464msh99b9a47695de3cap1af760jsn282fcfd2e0f1',
-                            'x-rapidapi-host': 'subtitles-for-youtube2.p.rapidapi.com',
+                            'x-rapidapi-host': 'high-availability-youtube-transcript-api.p.rapidapi.com',
                         },
                     };
-                    _a.label = 1;
+                    _b.label = 1;
                 case 1:
-                    _a.trys.push([1, 3, , 4]);
+                    _b.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, axios_1.default.request(options)];
                 case 2:
-                    response = _a.sent();
+                    response = _b.sent();
                     data = response.data;
-                    if (!Array.isArray(data)) {
-                        console.error('Unexpected response format:', data);
-                        return [2 /*return*/, []];
+                    // Assuming the API response includes `text` or an array you want to join
+                    if (Array.isArray(data)) {
+                        fullText = data
+                            .map(function (item) { return item.text; })
+                            .join(' ');
+                        return [2 /*return*/, { text: fullText }];
                     }
-                    return [2 /*return*/, data.map(function (item) { return ({
-                            index: item.index,
-                            start: item.start,
-                            dur: item.dur,
-                            end: item.end,
-                            text: item.text,
-                        }); })];
+                    else if (typeof data === 'object' && 'text' in data) {
+                        return [2 /*return*/, data];
+                    }
+                    console.warn('⚠️ Unexpected API response format');
+                    return [2 /*return*/, { text: '' }];
                 case 3:
-                    error_1 = _a.sent();
-                    console.error('Error fetching transcript:', error_1);
-                    return [2 /*return*/, []];
+                    error_1 = _b.sent();
+                    console.error('❌ Error fetching transcript:', ((_a = error_1 === null || error_1 === void 0 ? void 0 : error_1.response) === null || _a === void 0 ? void 0 : _a.data) || error_1.message);
+                    return [2 /*return*/, { text: '' }];
                 case 4: return [2 /*return*/];
             }
         });
     });
 }
-exports.default = getTranscript;

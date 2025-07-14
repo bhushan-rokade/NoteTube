@@ -48,10 +48,7 @@ var getGeminiRes = function (videoId, mesg) { return __awaiter(void 0, void 0, v
                 trans = _a.sent();
                 genAI = new GoogleGenerativeAI(process.env.API_KEY || '');
                 model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-                subprompt = '';
-                trans.forEach(function (element) {
-                    subprompt += element.text + ' ';
-                });
+                subprompt = trans.text;
                 prompt = subprompt + "\n".concat(mesg);
                 return [4 /*yield*/, model.generateContent(prompt)];
             case 2:
@@ -59,7 +56,6 @@ var getGeminiRes = function (videoId, mesg) { return __awaiter(void 0, void 0, v
                 return [4 /*yield*/, result.response.text()];
             case 3:
                 output = _a.sent();
-                console.log(output);
                 return [2 /*return*/, output];
         }
     });
