@@ -2,10 +2,10 @@ import { useRef, useState } from 'react';
 import axios from 'axios';
 import utils from '../utils/consts.ts';
 import '../App.css';
-import MarkDownViewer from '../components/MarkDownViewer.tsx';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useReactToPrint } from 'react-to-print';
 import FormView from '../components/FormView.tsx';
+import TypewriterText from '../components/TypewriterText.tsx';
 export default function Home() {
   const outputDivRef = useRef<HTMLDivElement>(null);
   const iFrameRef = useRef<HTMLIFrameElement>(null);
@@ -13,7 +13,18 @@ export default function Home() {
   const [description, setDescription] = useState('');
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
+  const [download, setDownload] = useState(false);
   const componentRef = useRef(null);
+  const serverOverloadMessage =
+    '#⚠️ Server Overloaded\n\n' +
+    'The server is currently experiencing high traffic or technical difficulties.\n\n' +
+    'Please try again after some time. We appreciate your patience! 🙏\n\n' +
+    '---\n\n' +
+    '**What you can do:**\n' +
+    '- Wait a few minutes and refresh the page.\n' +
+    '- Ensure you have a stable internet connection.\n' +
+    '\n' +
+    'Thank you for your understanding!';
 
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
@@ -63,6 +74,10 @@ export default function Home() {
         } else {
           alert('No response received from the server');
         }
+      })
+      .catch(() => {
+        setLoading(false);
+        setNotes(serverOverloadMessage);
       });
   };
 
@@ -117,6 +132,7 @@ export default function Home() {
             <a
               className='closeBtn'
               title='Download Notes'
+              style={{ display: download ? 'block' : 'none' }}
               onClick={handlePrint}>
               <i className='bi bi-download'></i>
             </a>
@@ -133,7 +149,11 @@ export default function Home() {
               <h3>It may take a few seconds</h3>
             </div>
           ) : (
-            <MarkDownViewer content={notes} />
+            <TypewriterText
+              text={notes}
+              speed={1}
+              onDone={() => setDownload(true)}
+            />
           )}
         </div>
       </div>
