@@ -5,6 +5,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { useReactToPrint } from 'react-to-print';
 import FormView from '../components/FormView.tsx';
 import TypewriterText from '../components/TypewriterText.tsx';
+import utils from '../utils/consts.ts';
 export default function Home() {
   const outputDivRef = useRef<HTMLDivElement>(null);
   const iFrameRef = useRef<HTMLIFrameElement>(null);
@@ -65,7 +66,7 @@ export default function Home() {
       alert('Invalid YouTube link');
     }
     await axios
-      .post(`http://localhost:3001/getGeminiResponse`, data)
+      .post(utils.BASE_URL + utils.getResponse, data)
       .then((res) => {
         if (res.data && res.data.response) {
           setLoading(false);
