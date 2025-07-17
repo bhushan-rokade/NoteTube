@@ -7,7 +7,7 @@ type TransObj = {
   end: number;
   text: string;
 };
-
+require('dotenv').config();
 // Helper function to extract video ID from URL or accept ID directly
 function extractVideoId(input: string): string | null {
   const regex =
@@ -27,7 +27,7 @@ async function getTranscript(
   }
 
   console.log('Fetching transcript for videoId:', videoId);
-
+  const rapidapi_key = process.env.RAPID_API_KEY;
   const options = {
     method: 'GET',
     url: `https://subtitles-for-youtube2.p.rapidapi.com/subtitles/${videoId}`,
@@ -36,7 +36,7 @@ async function getTranscript(
       translated: 'None',
     },
     headers: {
-      'x-rapidapi-key': '99919ff464msh99b9a47695de3cap1af760jsn282fcfd2e0f1',
+      'x-rapidapi-key': rapidapi_key,
       'x-rapidapi-host': 'subtitles-for-youtube2.p.rapidapi.com',
     },
   };

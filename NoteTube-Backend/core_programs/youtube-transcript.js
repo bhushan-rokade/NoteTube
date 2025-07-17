@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var axios_1 = require("axios");
+require('dotenv').config();
 // Helper function to extract video ID from URL or accept ID directly
 function extractVideoId(input) {
     var regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
@@ -45,7 +46,7 @@ function extractVideoId(input) {
 }
 function getTranscript(input_1) {
     return __awaiter(this, arguments, void 0, function (input, lang) {
-        var videoId, options, response, data, error_1;
+        var videoId, rapidapi_key, options, response, data, error_1;
         if (lang === void 0) { lang = 'en'; }
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -56,6 +57,7 @@ function getTranscript(input_1) {
                         return [2 /*return*/, []];
                     }
                     console.log('Fetching transcript for videoId:', videoId);
+                    rapidapi_key = process.env.RAPID_API_KEY;
                     options = {
                         method: 'GET',
                         url: "https://subtitles-for-youtube2.p.rapidapi.com/subtitles/".concat(videoId),
@@ -64,7 +66,7 @@ function getTranscript(input_1) {
                             translated: 'None',
                         },
                         headers: {
-                            'x-rapidapi-key': '99919ff464msh99b9a47695de3cap1af760jsn282fcfd2e0f1',
+                            'x-rapidapi-key': rapidapi_key,
                             'x-rapidapi-host': 'subtitles-for-youtube2.p.rapidapi.com',
                         },
                     };
