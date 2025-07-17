@@ -32,7 +32,7 @@ NoteTube is a powerful web app that allows you to **generate summarized notes fr
 
 | Home Page | Generated Notes |
 |----------|-----------------|
-| ![Home Page](./screenshots/home.png) | ![Notes Page](./screenshots/notes.png) |
+| ![Home Page](./screenshots/notetube_home.png) | ![Notes Page](./screenshots/notetube_notes.png) |
 
 ---
 
