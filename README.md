@@ -103,7 +103,6 @@ notetube/
 Created with ❤️ by [Bhushan Rokade](mailto:rokadebhushan2005@gmail.com)
 
 - 🐙 GitHub: [@rokadebhushan](https://github.com/rokadebhushan)
-- 📱 LinkedIn: [linkedin.com/in/rokadebhushan](https://linkedin.com/in/rokadebhushan)
 
 ---
 
