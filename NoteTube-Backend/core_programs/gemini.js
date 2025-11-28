@@ -52,7 +52,7 @@ var getGeminiRes = function (videoId, mesg) { return __awaiter(void 0, void 0, v
                 console.log('Transcript generated');
                 genAI = new GoogleGenerativeAI(process.env.API_KEY || '' // Ensure API_KEY is set in .env file
                 );
-                model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+                model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
                 subprompt = '';
                 trans.forEach(function (element) {
                     subprompt += element.text + ' ';
