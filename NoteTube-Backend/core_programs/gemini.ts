@@ -19,7 +19,7 @@ const getGeminiRes = async (videoId: string, mesg: string) => {
   const genAI = new GoogleGenerativeAI(
     process.env.API_KEY || '' // Ensure API_KEY is set in .env file
   ); // use environment variable correctly
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  const model = genAI.getGenerativeModel({ model : "gemini-2.5-flash" });
 
   let subprompt = '';
   trans.forEach((element) => {
